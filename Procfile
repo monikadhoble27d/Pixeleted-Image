@@ -1,0 +1,1 @@
+web: gunicorn pixelated_image.wsgi

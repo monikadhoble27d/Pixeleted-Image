@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Upload Image</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-d5wKSEYfsM97b9lQzqBQ0/9IoBUuO9vK+30oT6VjlaJwsD1T3N5Z5e7P+i1wiNj5K4C5PB9mkcz0a20LqZTwjg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      .container {
+        max-width: 500px;
+        width: 100%;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        text-align: center;
+      }
+      h2 {
+        margin-bottom: 20px;
+      }
+      .file-input {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        cursor: pointer;
+      }
+      .file-input input {
+        display: none;
+      }
+      .file-input .icon {
+        font-size: 48px;
+        color: #ccc;
+      }
+      .file-input:hover {
+        border-color: #aaa;
+      }
+      .file-input:hover .icon {
+        color: #aaa;
+      }
+      .buttons {
+        text-align: center;
+      }
+      .buttons input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .buttons input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+      #overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+      }
+      #overlay .content {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        max-width: 300px;
+        margin-left: calc(50% - 150px);
+        margin-top: 100px;
+      }
+      #overlay .content i {
+        font-size: 24px;
+        color: #007bff;
+      }
+      #overlay .content p {
+        margin-top: 10px;
+      }
+      #error {
+        color: red;
+        text-align: center;
+        margin-top: 10px;
+      }
+      #success {
+        color: green;
+        text-align: center;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Upload Image</h2>
+      <form
+        action="{% url 'process_image_api' %}"
+        method="post"
+        enctype="multipart/form-data"
+        id="imageUploadForm"
+      >
+        {% csrf_token %}
+        <label class="file-input" for="imageUpload">
+          <i class="fas fa-upload icon"></i>
+          <span>Click to select an image</span>
+          <input type="file" name="image" id="imageUpload" required />
+        </label>
+        <div class="buttons">
+          <input type="submit" value="Generate" id="processImage" />
+        </div>
+      </form>
+      <div id="error"></div>
+      <div id="success"></div>
+    </div>
+
+    <div id="overlay">
+      <div class="content">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Uploading...</p>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#imageUploadForm").submit(function () {
+          $("#overlay").show();
+          $("#error").hide();
+          $("#success").hide();
+
+          // The form will be submitted normally, no need for ajax call here
+        });
+
+        $(".file-input").click(function () {
+          $("#imageUpload").click();
+        });
+
+        $("#imageUpload").change(function () {
+          const fileName = $(this).val().split("\\").pop();
+          $(this).siblings("span").text(fileName);
+        });
+      });
+    </script>
+  </body>
+</html>
